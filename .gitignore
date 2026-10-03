@@ -1,0 +1,32 @@
+# Environment secrets (Sabse zaroori - keys leak nahi honi chahiye)
+.env
+*.env
+backend/.env
+frontend/.env
+
+# Local SQLite Database
+*.db
+*.sqlite3
+backend/specprompt.db
+
+# Python files
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+env/
+
+# Node & Frontend build
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+build/
+.vite/
+
+# OS and Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
