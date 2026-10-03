@@ -1,5 +1,7 @@
-from typing import Optional
+from typing import Optional, Union
 from pathlib import Path
+from pydantic import field_validator
+import json
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -17,7 +19,7 @@ class Settings(BaseSettings):
 
     app_name: str = "SpecPrompt"
     database_url: str = "sqlite:///./specprompt.db"
-    cors_origins: list[str] = ["http://localhost:5173"]
+    cors_origins: Union[list[str], str] = ["*"]
 
     llm_provider: str = "openai"
     llm_model: str = "openai/gpt-oss-20b"
@@ -27,6 +29,17 @@ class Settings(BaseSettings):
 
     openai_api_key: Optional[str] = None
     llm_timeout_seconds: float = 60.0
+
+    @field_validator("cors_origins", mode="before")
+    def assemble_cors_origins(cls, v):
+        if isinstance(v, str):
+            if v.startswith("[") and v.endswith("]"):
+                try:
+                    return json.loads(v)
+                except Exception:
+                    pass
+            return [i.strip() for i in v.split(",") if i.strip()]
+        return v
 
 
 settings = Settings()
